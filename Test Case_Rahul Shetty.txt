@@ -1,0 +1,178 @@
+Test Steps
+1. Login
+Login with valid credentials.
+Verify user lands on Dashboard.
+Verify "HOME" button is visible.
+
+Validation
+
+await expect(page.getByRole('button', { name: 'HOME' })).toBeVisible();
+2. Add Multiple Products
+
+Products:
+
+ZARA COAT 3
+ADIDAS ORIGINAL
+iphone 13 pro
+
+Loop through products and click Add To Cart.
+
+Validation
+
+Verify toast message:
+
+await expect(page.locator('#toast-container')).toContainText('Product Added To Cart');
+3. Open Cart
+
+Click:
+
+await page.getByRole('button', { name: 'Cart' }).click();
+
+Validate all products exist.
+
+await expect(page.getByText('ZARA COAT 3')).toBeVisible();
+await expect(page.getByText('ADIDAS ORIGINAL')).toBeVisible();
+await expect(page.getByText('iphone 13 pro')).toBeVisible();
+4. Calculate Cart Total
+
+Capture all prices.
+
+Example:
+
+const prices = await page
+    .locator('.cartSection h3 + p')
+    .allTextContents();
+
+Convert:
+
+const total = prices
+    .map(price => Number(price.replace(/[^\d]/g, '')))
+    .reduce((sum, price) => sum + price, 0);
+
+Capture displayed total.
+
+const displayedTotal = await page.locator('.totalRow').textContent();
+
+Validate:
+
+expect(displayedTotal).toContain(total.toString());
+5. Multiple Window Handling
+
+Open Terms & Conditions in a new tab.
+
+const [newPage] = await Promise.all([
+    page.context().waitForEvent('page'),
+    page.getByText('Terms').click()
+]);
+
+Wait for load:
+
+await newPage.waitForLoadState();
+
+Validate:
+
+await expect(newPage).toHaveTitle(/Terms/i);
+
+Capture some text:
+
+const heading = await newPage.locator('h1').textContent();
+
+Validate:
+
+expect(heading).toContain('Terms');
+
+Close:
+
+await newPage.close();
+
+Return:
+
+await page.bringToFront();
+6. Checkout
+
+Proceed:
+
+await page.getByText('Checkout').click();
+
+Type country:
+
+await page.getByPlaceholder('Select Country').fill('aus');
+
+Select:
+
+await page.getByRole('button', { name: 'Australia' }).click();
+7. Validate Email
+
+Capture displayed email.
+
+const email = await page.locator('.user__name').textContent();
+
+Validate:
+
+expect(email).toContain('debojeet');
+8. Place Order
+await page.getByText('Place Order').click();
+9. Capture Order ID
+const orderId = await page.locator('.em-spacer-1').textContent();
+
+Store:
+
+const orderNumber = orderId.trim();
+
+Validate success message:
+
+await expect(page.getByText('Thankyou for the order.')).toBeVisible();
+10. Order History Validation
+
+Navigate:
+
+await page.getByRole('button', { name: 'ORDERS' }).click();
+
+Get all orders:
+
+const orders = await page
+    .locator('tbody tr')
+    .allTextContents();
+
+Validate:
+
+expect(
+    orders.some(order => order.includes(orderNumber))
+).toBeTruthy();
+Advanced Enhancements
+
+You can make it even more framework-oriented by:
+
+Reading product names from Excel.
+Storing order IDs in JSON.
+Creating Page Object Models:
+LoginPage
+DashboardPage
+CartPage
+CheckoutPage
+OrdersPage
+Using API login to generate token instead of UI login.
+Attaching screenshots and order IDs to Allure reports.
+
+This single scenario covers most interview-level Playwright concepts:
+
+API + UI integration
+Page Object Model
+Dynamic locators
+Arrays and loops
+Price calculations
+Multiple tabs/windows
+Assertions
+Data-driven testing
+Order validation across pages.
+
+
+
+
+
+
+const total = prices .map(price => Number(price.replace(/[^\d]/g, ''))) .reduce((sum, price) => sum + price, 0);
+
+
+
+

@@ -1,0 +1,13 @@
+{
+
+"loginurl" : "https://rahulshettyacademy.com/api/ecom/auth/login",
+"payload" : {
+
+"userEmail": "debojeet.bhattacharya@tgmail.com", 
+"userPassword": "Abcd@1234"},
+"dashurl": "https://rahulshettyacademy.com/client",
+"prod1":"iphone 13 pro",
+"prod2":"ADIDAS ORIGINAL"
+
+
+}

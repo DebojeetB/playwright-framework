@@ -1,0 +1,6 @@
+Subscription Azure subscription 1
+Resource group DebojeetPlaywright
+Name PlaywrightDebojeet
+Region East US
+Reporting Enabled
+Storage account (New) pwstrgdebojeetplaywra635

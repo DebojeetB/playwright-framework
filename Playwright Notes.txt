@@ -1,0 +1,188 @@
+Playwright URL- https://playwright.dev/docs
+Playwright Agents- https://playwright.dev/docs/test-agents
+
+1. To accept/reject any JavaScript popup when comes during test execution
+page.on('dialog', dialog=> dialog.accept);
+
+2. Code to check if any element is visible
+await expect(page.locator(".displayed-class")).toBeVisible();
+
+3. Code to check if any element is hidden
+await expect(page.locator(".displayed-class")).toBeHidden();
+
+4. There are different methods to handle network calls
+
+    i. Route.fulfill --> In this method, a mock response can be passed in browser through fulfill method to validate results on UI
+    ii. Route.continue --> In this method, request can be tweaked to check if application works fine. E.g. if a site's endpoint is updated then ideally it should through forbidden error. This we can check through Continue.
+    iii. Route.abort --> This method is used if we want to block some API calls like if we want to block the images shown in UI or if we want to block the CSS then this method should be used.
+
+5. To install excelJS for Excel data import and export
+   Open CMD- mkdir ExcelJSUtil
+             cd ExcelJSUtil
+             npm init
+             npm install exceljs
+
+Then import the file in Visual Studio from C:\Users\RDRL\ExcelJS
+
+6. To install ExcelJS in Playwright- add the dependency for exceljs in Package.json file for Playwright and then npm install in Terminal
+
+7. To execute the test case in specific mode, like on multiple browsers/capture video/screenshots/logs- need to make changes in playwright.config.js file. 
+
+use:{
+browserName: 'chromium', --> Here any browser name can be added
+headless: false,
+viewport: {height:720, width:720},  --> this is particularly to test the flow in mentioned window size
+video: 'retain-on-failure',
+trace: 'on'
+}
+
+8. retires: 1 --> Use it to rerun a test case if it has failed. Add it inside package file under config.
+
+9. workers: 3 --> Use it to execute tests in parallel. If 3 is declared, then 3 different test classes would be executed at once in parallel. Maximum 5 tests can be executed by default by Playwright. Add it inside package file under config. 
+Note- it can only be applied on test files and not on test cases added inside a single class file.
+
+10. To execute multiple test cases added in a single file parallelly, add the below code in class file after declaring test
+ test.describe.configure({mode:'parallel'});
+
+Note- Mode can be kept to serial- in this case test cases are interdependent. If first test case fails, reset all will be skipped.
+
+11. npx playwright test- grep @Web --> Add @Web before test name inside test like- test('@Web First Test Case')
+
+12. Allure is a report view tool through which execution report of test cases can be viewed. To install Allure, type below in Playwright
+npm i -D @playwright/test allure-playwright
+
+===== > To run the test case and view report through Allure type below commands-
+npx playwright test tests/Transaction_TC1.spec.js --reporter=line,allure-playwright
+ 
+==== > Once test case has passed, type below  (Generate report)
+npx allure generate ./allure-results --output ./allure-report 
+
+==== > Now open report
+npx allure open ./allure-report
+
+13. Below locators can also be used to interact with elements
+
+await pageTwo.getByText("Visit FAQ Page").click();
+
+await pageTwo.locator("[href='/authentication']").click();
+
+14. To handle multiple tabs, use below code
+
+const [pageTwo]= await Promise.all([
+        this.page.context().waitForEvent('page'),
+        await this.page.locator(".blinkingText").click()
+    ])
+    await pageTwo.waitForLoadState();
+
+Now again to redirect to parent tab, use
+await this.page.bringToFront();
+
+To redirect again to the child tab, use
+await pageTwo.bringToFront();
+
+15. For setting up MCP Server in Playwright,
+
+MCP server is basically used to perform the Browser related actions. For executing a test case like clicking or entering values in textbox.
+
+Open VS Code → Command Palette:
+
+Ctrl + Shift + P
+
+Run:
+
+GitHub Copilot: Enable MCP Servers
+@playwright/mcp
+server-playwright
+
+16. To install Playwright- agents like Planner, Generator & Healer- type the below command in Terminal
+npx playwright init-agents --loop=vscode
+
+17. To install Azure
+npm init @azure/playwright@latest
+
+Then once done, restart VS and enter below command
+ag login
+
+if it does not work, enter below
+az login --use-device-code
+
+now enter below,
+export PLAYWRIGHT_SERVICE_URL=wss://eastus.api.playwright.microsoft.com/playwrightworkspaces/f9dcdb86-0352-45a3-a4c6-d8728b2c78d7/browsers
+
+
+az role assignment create --assignee "2cc8dd85-ccf6-4ca3-ab8c-5efdef257550" --role "Storage Blob Data Contributor" --scope (az storage account show --name pwstrgdebojeetplaywra635 --resource-group DebojeetPlaywright --query id -o tsv)
+
+To run through Azure in a new session, first type below command
+$env:PLAYWRIGHT_SERVICE_URL="wss://eastus.api.playwright.microsoft.com/playwrightworkspaces/f9dcdb86-0352-45a3-a4c6-d8728b2c78d7/browsers"
+
+Then,  npx playwright test --config=playwright.service.config.js --workers=4
+
+
+az account set --subscription "9a6193cf-c824-4dd7-9bce-ebaf234940b8"
+
+$env:PLAYWRIGHT_WORKSPACE_ID="/subscriptions/9a6193cf-c824-4dd7-9bce-ebaf234940b8/resourceGroups/DebojeetPlaywright/providers/Microsoft.LoadTestService/playwrightWorkspaces/PlaywrightDebojeet"
+$env:PLAYWRIGHT_SERVICE_URL="https://<region>.api.playwright.microsoft.com"
+
+
+$env:PLAYWRIGHT_SERVICE_URL="https://eastus.api.playwright.microsoft.com"
+$env:PLAYWRIGHT_WORKSPACE_ID="PlaywrightDebojeet"
+
+{
+  "environmentName": "AzureCloud",
+  "homeTenantId": "efc91616-124b-4199-a38a-241105821b2c",
+  "id": "9a6193cf-c824-4dd7-9bce-ebaf234940b8",
+  "isDefault": true,
+  "managedByTenants": [],
+  "name": "Azure subscription 1",
+  "state": "Enabled",
+  "tenantDefaultDomain": "debojeetbhattacharyagmail.onmicrosoft.com",
+  "tenantDisplayName": "Default Directory",
+  "tenantId": "efc91616-124b-4199-a38a-241105821b2c",
+  "user": {
+    "name": "debojeet.bhattacharya@gmail.com",
+    "type": "user"
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
