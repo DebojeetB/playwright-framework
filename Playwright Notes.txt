@@ -115,71 +115,40 @@ az role assignment create --assignee "2cc8dd85-ccf6-4ca3-ab8c-5efdef257550" --ro
 To run through Azure in a new session, first type below command
 $env:PLAYWRIGHT_SERVICE_URL="wss://eastus.api.playwright.microsoft.com/playwrightworkspaces/f9dcdb86-0352-45a3-a4c6-d8728b2c78d7/browsers"
 
-Then,  npx playwright test --config=playwright.service.config.js --workers=4
+Then,  npx playwright test --config=playwright.service.config.js
 
+18. GITHUB
 
-az account set --subscription "9a6193cf-c824-4dd7-9bce-ebaf234940b8"
+First install Git and login
+Now to push code for first time
 
-$env:PLAYWRIGHT_WORKSPACE_ID="/subscriptions/9a6193cf-c824-4dd7-9bce-ebaf234940b8/resourceGroups/DebojeetPlaywright/providers/Microsoft.LoadTestService/playwrightWorkspaces/PlaywrightDebojeet"
-$env:PLAYWRIGHT_SERVICE_URL="https://<region>.api.playwright.microsoft.com"
+git init
+git add .
+git commit -m "First Git Commit"
+git branch -M main
+git remote add origin https://github.com/DebojeetB/playwright-framework.git  (playwright-framework is the repository name. It can be anything.)
+git push -u origin main
 
+From second time onwards,
+git status
+git add .
+git commit -m "Describe your change"
+git push
 
-$env:PLAYWRIGHT_SERVICE_URL="https://eastus.api.playwright.microsoft.com"
-$env:PLAYWRIGHT_WORKSPACE_ID="PlaywrightDebojeet"
-
-{
-  "environmentName": "AzureCloud",
-  "homeTenantId": "efc91616-124b-4199-a38a-241105821b2c",
-  "id": "9a6193cf-c824-4dd7-9bce-ebaf234940b8",
-  "isDefault": true,
-  "managedByTenants": [],
-  "name": "Azure subscription 1",
-  "state": "Enabled",
-  "tenantDefaultDomain": "debojeetbhattacharyagmail.onmicrosoft.com",
-  "tenantDisplayName": "Default Directory",
-  "tenantId": "efc91616-124b-4199-a38a-241105821b2c",
-  "user": {
-    "name": "debojeet.bhattacharya@gmail.com",
-    "type": "user"
-  }
-}
+else
+git status
+git add tests/Test case Name (if only single test case has been updated)
+git commit -m "Describe your change"
+git push
 
 
 
+az ad sp create-for-rbac --name "github-playwright" --role "Contributor" --scopes "/subscriptions/9a6193cf-c824-4dd7-9bce-ebaf234940b8/resourceGroups/DebojeetPlaywright" --json-auth
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+az role assignment create `
+  --assignee "$(az ad sp list --display-name "github-playwright" --query "[0].appId" -o tsv)" `
+  --role "Storage Blob Data Contributor" `
+  --scope "$(az storage account show --name pwstrgdebojeetplaywra635 --resource-group DebojeetPlaywright --query id -o tsv)"
 
 
 
