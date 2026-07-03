@@ -1,4 +1,5 @@
 const excelJS= require('exceljs');
+const path= require("path");
 
 class APIandExcelDetails{
 
@@ -21,7 +22,8 @@ async getToken(loginURL, loginPayload){
 async getExcelValue(){
 
 const workBook= new excelJS.Workbook();
-await workBook.xlsx.readFile("C:/Users/RDRL/Desktop/PlaywrightData.xlsx");
+const filePath = path.join(__dirname, "..", "TestData", "PlaywrightData.xlsx");
+await workBook.xlsx.readFile(filePath);
 const workSheet= workBook.getWorksheet("Items");
 const itemSelect= workSheet.getRow(2).getCell(2);
 
