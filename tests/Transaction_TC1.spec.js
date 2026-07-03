@@ -89,6 +89,7 @@ await console.log(allOrders);
 for(const order of orderIDs){
   expect(allOrders).toContain(order);
 }
+await console.log("Orders validated successfully");
 
 })
 
